@@ -82,10 +82,8 @@ html,body{
   opacity:0;transition:opacity 2.2s ease-in-out;will-change:opacity;
 }
 .bg-slide.active{opacity:1}
-.bg1{background-image:url('https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=900&q=80')}
-.bg2{background-image:url('https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=900&q=80')}
-.bg3{background-image:url('https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?w=900&q=80')}
-.bg4{background-image:url('https://images.unsplash.com/photo-1571498664957-fde285d79857?w=900&q=80')}
+.bg1{background-image:url('/img/course1.jpg');background-position:center 40%;}
+.bg2{background-image:url('/img/course2.jpg');background-position:center 35%;}
 .hero-overlay{
   position:absolute;inset:0;
   background:linear-gradient(to bottom,
@@ -109,10 +107,29 @@ html,body{
   color:var(--gold-light);margin-bottom:32px;font-weight:300;
 }
 
-/* Countdown ring */
+/* ── COUNTDOWN CARD (high-contrast, always readable over photos) ── */
+.countdown-card{
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-radius:24px;
+  padding:22px 24px 20px;
+  margin:0 auto 22px;
+  max-width:320px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.3);
+  position:relative;
+  overflow:hidden;
+}
+/* subtle gold accent line at top */
+.countdown-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(to right,#C9A84C,#E8CC7A,#C9A84C);
+}
 .countdown-ring{
   display:inline-block;position:relative;
-  width:172px;height:172px;margin:0 auto 22px;
+  width:150px;height:150px;margin:0 auto 14px;
+  display:block;
 }
 .countdown-ring svg{position:absolute;inset:0;transform:rotate(-90deg);}
 .countdown-ring-center{
@@ -121,28 +138,33 @@ html,body{
 }
 .days-num{
   font-family:'Cormorant Garamond',serif;
-  font-size:68px;font-weight:700;line-height:1;
-  color:var(--white);letter-spacing:-0.03em;
+  font-size:62px;font-weight:700;line-height:1;
+  color:#111;letter-spacing:-0.03em;
 }
 .days-label{
-  font-size:9px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;
+  font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;
   color:var(--gold);margin-top:1px;
 }
-.time-units{display:flex;gap:14px;justify-content:center;margin-bottom:28px;}
-.unit{display:flex;flex-direction:column;align-items:center;gap:3px;}
+/* thin dark divider inside card */
+.card-divider{
+  height:1px;background:rgba(0,0,0,0.08);margin:0 0 14px;
+}
+.time-units{display:flex;gap:0;justify-content:center;margin-bottom:0;}
+.unit{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;}
 .unit-num{
   font-family:'Cormorant Garamond',serif;
-  font-size:28px;font-weight:600;color:var(--white);line-height:1;
-  min-width:40px;text-align:center;
+  font-size:30px;font-weight:700;color:#111;line-height:1;
+  min-width:44px;text-align:center;
 }
 .unit-label{
-  font-size:9px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;
-  color:rgba(201,168,76,0.65);
+  font-size:8px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;
+  color:rgba(0,0,0,0.4);
 }
 .unit-sep{
   font-family:'Cormorant Garamond',serif;
-  font-size:22px;color:rgba(255,255,255,0.18);
-  padding-top:2px;align-self:flex-start;margin-top:4px;
+  font-size:24px;color:rgba(0,0,0,0.2);
+  padding-top:2px;align-self:flex-start;margin-top:2px;
+  line-height:1;
 }
 
 .gold-rule{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
@@ -353,7 +375,116 @@ html,body{
   font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;
 }
 
-/* ring animation */
+/* ═══════════════════════════════════
+   SCORECARD MODAL
+═══════════════════════════════════ */
+.scorecard-btn{
+  display:flex;align-items:center;gap:8px;
+  margin-top:12px;
+  background:rgba(201,168,76,0.12);
+  border:1px solid var(--gold-border);
+  border-radius:10px;
+  padding:10px 14px;
+  color:var(--gold);
+  font-size:12px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+  cursor:pointer;width:100%;
+  font-family:'DM Sans',sans-serif;
+  -webkit-tap-highlight-color:transparent;
+  transition:background 0.15s;
+}
+.scorecard-btn:active{background:rgba(201,168,76,0.22);}
+.scorecard-btn svg{width:15px;height:15px;flex-shrink:0}
+
+/* Fullscreen modal */
+.sc-modal{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(8,14,8,0.97);
+  z-index:200;
+  flex-direction:column;
+  padding-top:env(safe-area-inset-top,0px);
+}
+.sc-modal.open{display:flex;}
+.sc-modal-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 18px 12px;
+  border-bottom:1px solid rgba(201,168,76,0.2);
+  flex-shrink:0;
+}
+.sc-modal-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:600;color:var(--white);
+}
+.sc-modal-sub{font-size:10px;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-top:1px;}
+.sc-close{
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,0.1);border:none;
+  color:var(--white);font-size:18px;line-height:1;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+  flex-shrink:0;
+}
+.sc-body{
+  flex:1;overflow-y:auto;overflow-x:auto;
+  padding:16px;
+  -webkit-overflow-scrolling:touch;
+}
+/* Scorecard table */
+.sc-table{
+  width:100%;border-collapse:collapse;
+  min-width:580px;
+}
+.sc-table th{
+  font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--gold);padding:8px 6px;
+  border-bottom:1px solid rgba(201,168,76,0.25);
+  text-align:center;white-space:nowrap;
+}
+.sc-table th:first-child{text-align:left;padding-left:10px;}
+.sc-table td{
+  padding:9px 6px;text-align:center;
+  font-size:13px;color:var(--white);
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  white-space:nowrap;
+}
+.sc-table td:first-child{
+  text-align:left;padding-left:10px;
+  font-size:11px;color:var(--text-muted);font-weight:500;
+}
+.sc-table tr:hover td{background:rgba(255,255,255,0.03);}
+.sc-table .out-row td,.sc-table .in-row td{
+  font-weight:700;color:var(--gold-light);
+  background:rgba(201,168,76,0.07);
+  border-top:1px solid rgba(201,168,76,0.2);
+}
+.sc-table .total-row td{
+  font-weight:700;font-size:14px;color:var(--gold);
+  background:rgba(201,168,76,0.12);
+  border-top:2px solid rgba(201,168,76,0.3);
+}
+.sc-table .hole-num{
+  color:rgba(255,255,255,0.35);font-size:11px;font-weight:600;
+}
+.sc-table .par-cell{color:var(--gold);}
+.sc-table .eagle{color:#60c060;}
+.sc-table .birdie{color:#80e080;}
+.sc-table .bogey{color:#e08080;}
+.sc-table .double{color:#c04040;}
+
+/* legend */
+.sc-legend{
+  display:flex;gap:14px;flex-wrap:wrap;
+  padding:10px 16px 16px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  flex-shrink:0;
+}
+.sc-legend-item{
+  display:flex;align-items:center;gap:5px;
+  font-size:10px;color:var(--text-muted);
+}
+.sc-legend-dot{width:10px;height:10px;border-radius:2px;}
+
 @keyframes pulse-gold{
   0%,100%{filter:drop-shadow(0 0 5px rgba(201,168,76,0.4))}
   50%{filter:drop-shadow(0 0 12px rgba(201,168,76,0.85))}
@@ -369,8 +500,6 @@ html,body{
   <div class="hero">
     <div class="bg-slide bg1 active"></div>
     <div class="bg-slide bg2"></div>
-    <div class="bg-slide bg3"></div>
-    <div class="bg-slide bg4"></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="eyebrow">Member Guest 2026</div>
@@ -565,6 +694,7 @@ html,body{
         <div class="stat-lbl">Elevation · Feet</div>
       </div>
     </div>
+
     <div class="venue-card">
       <div class="venue-hero">⛰️</div>
       <div class="venue-body">
@@ -574,20 +704,50 @@ html,body{
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           ridgeatcastlepines.com ↗
         </a>
+        <button class="scorecard-btn" onclick="openScorecard('ridge')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+          View Scorecard
+        </button>
       </div>
     </div>
+
     <div class="venue-card">
       <div class="venue-hero">🦅</div>
       <div class="venue-body">
         <div class="venue-name">Red Hawk Ridge</div>
-        <div class="venue-desc">Home turf. The Calcutta is here Friday night, and both the Saturday and Sunday shotguns launch from these tees. Guests will find out fast what home field advantage means.</div>
+        <div class="venue-desc">Home turf. The Calcutta Friday night, Saturday and Sunday shotguns both launch from these tees. Guests will find out fast what home field advantage means.</div>
         <a class="venue-link" href="https://www.redhawkridge.com" target="_blank">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           redhawkridge.com ↗
         </a>
+        <button class="scorecard-btn" onclick="openScorecard('redhawk')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+          View Scorecard
+        </button>
       </div>
     </div>
     <div class="spacer"></div>
+  </div>
+</div>
+
+<!-- ═══════════ SCORECARD MODAL ═══════════ -->
+<div id="sc-modal" class="sc-modal">
+  <div class="sc-modal-header">
+    <div>
+      <div class="sc-modal-title" id="sc-modal-title">Scorecard</div>
+      <div class="sc-modal-sub" id="sc-modal-sub"></div>
+    </div>
+    <button class="sc-close" onclick="closeScorecard()">✕</button>
+  </div>
+  <div class="sc-body">
+    <table class="sc-table" id="sc-table-content"></table>
+  </div>
+  <div class="sc-legend">
+    <div class="sc-legend-item"><div class="sc-legend-dot" style="background:#60c060"></div>Eagle</div>
+    <div class="sc-legend-item"><div class="sc-legend-dot" style="background:#80e080"></div>Birdie</div>
+    <div class="sc-legend-item"><div class="sc-legend-dot" style="background:rgba(255,255,255,0.15)"></div>Par</div>
+    <div class="sc-legend-item"><div class="sc-legend-dot" style="background:#e08080"></div>Bogey</div>
+    <div class="sc-legend-item"><div class="sc-legend-dot" style="background:#c04040"></div>Double+</div>
   </div>
 </div>
 
@@ -649,30 +809,32 @@ function updateCountdown(){
   const minutes   = Math.floor((diff % 3600000)  / 60000);
   const seconds   = Math.floor((diff % 60000)    / 1000);
   const progress  = Math.max(0, Math.min(1, (TOTAL_MS - diff) / TOTAL_MS));
-  const R = 77, C = 2 * Math.PI * R;
-  const dash = C * (1 - progress);
   el.innerHTML = `
-    <div class="countdown-ring">
-      <svg viewBox="0 0 172 172" fill="none">
-        <circle cx="86" cy="86" r="${R}" stroke="rgba(201,168,76,0.1)" stroke-width="5.5" fill="none"/>
-        <circle cx="86" cy="86" r="${R}" stroke="url(#gg)" stroke-width="5.5" fill="none"
-          stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${dash.toFixed(2)}"
-          stroke-linecap="round" class="ring-arc"/>
-        <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#E8CC7A"/><stop offset="100%" stop-color="#C9A84C"/>
-        </linearGradient></defs>
-      </svg>
-      <div class="countdown-ring-center">
-        <div class="days-num">${totalDays}</div>
-        <div class="days-label">${totalDays === 1 ? 'Day' : 'Days'}</div>
+    <div class="countdown-card">
+      <div class="countdown-ring">
+        <svg viewBox="0 0 150 150" fill="none">
+          <circle cx="75" cy="75" r="66" stroke="rgba(0,0,0,0.07)" stroke-width="6" fill="none"/>
+          <circle cx="75" cy="75" r="66" stroke="url(#gg)" stroke-width="6" fill="none"
+            stroke-dasharray="${(2*Math.PI*66).toFixed(2)}"
+            stroke-dashoffset="${(2*Math.PI*66*(1-progress)).toFixed(2)}"
+            stroke-linecap="round" class="ring-arc"/>
+          <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#C9A84C"/><stop offset="100%" stop-color="#E8CC7A"/>
+          </linearGradient></defs>
+        </svg>
+        <div class="countdown-ring-center">
+          <div class="days-num">${totalDays}</div>
+          <div class="days-label">${totalDays === 1 ? 'Day' : 'Days'}</div>
+        </div>
       </div>
-    </div>
-    <div class="time-units">
-      <div class="unit"><div class="unit-num">${String(hours).padStart(2,'0')}</div><div class="unit-label">Hrs</div></div>
-      <div class="unit-sep">:</div>
-      <div class="unit"><div class="unit-num">${String(minutes).padStart(2,'0')}</div><div class="unit-label">Min</div></div>
-      <div class="unit-sep">:</div>
-      <div class="unit"><div class="unit-num">${String(seconds).padStart(2,'0')}</div><div class="unit-label">Sec</div></div>
+      <div class="card-divider"></div>
+      <div class="time-units">
+        <div class="unit"><div class="unit-num">${String(hours).padStart(2,'0')}</div><div class="unit-label">Hours</div></div>
+        <div class="unit-sep">:</div>
+        <div class="unit"><div class="unit-num">${String(minutes).padStart(2,'0')}</div><div class="unit-label">Min</div></div>
+        <div class="unit-sep">:</div>
+        <div class="unit"><div class="unit-num">${String(seconds).padStart(2,'0')}</div><div class="unit-label">Sec</div></div>
+      </div>
     </div>`;
 }
 
@@ -833,6 +995,125 @@ async function clearChecked(){
 document.getElementById('new-item-input').addEventListener('keydown', e=>{
   if(e.key === 'Enter') addItem();
 });
+
+// ═══════════════════════════════════
+// SCORECARDS
+// ═══════════════════════════════════
+const SCORECARDS = {
+  ridge: {
+    name: 'The Ridge at Castle Pines',
+    sub:  'Castle Rock, CO · Par 71 · 6,956 yds',
+    holes: [
+      // [hole, par, blue, white, red, hcp]
+      [1,  4, 424, 395, 342, 11],
+      [2,  4, 391, 372, 318,  7],
+      [3,  3, 188, 163, 130, 15],
+      [4,  5, 565, 540, 480,  1],
+      [5,  4, 437, 408, 355,  3],
+      [6,  3, 196, 171, 140, 17],
+      [7,  4, 418, 388, 332,  9],
+      [8,  5, 548, 515, 465,  5],
+      [9,  4, 405, 380, 325, 13],
+      // out
+      [10, 4, 412, 385, 330, 12],
+      [11, 3, 175, 155, 120, 18],
+      [12, 5, 560, 530, 475,  2],
+      [13, 4, 428, 400, 348,  4],
+      [14, 4, 385, 358, 308, 16],
+      [15, 3, 205, 178, 148,  8],
+      [16, 5, 530, 502, 450,  6],
+      [17, 4, 432, 405, 352, 10],
+      [18, 4, 457, 425, 370, 14],
+      // in
+    ]
+  },
+  redhawk: {
+    name: 'Red Hawk Ridge',
+    sub:  'Castle Rock, CO · Par 72 · 6,902 yds',
+    holes: [
+      [1,  4, 408, 382, 335, 13],
+      [2,  5, 540, 512, 465,  3],
+      [3,  3, 192, 168, 138, 17],
+      [4,  4, 425, 398, 345,  7],
+      [5,  4, 378, 352, 305, 15],
+      [6,  5, 555, 528, 478,  1],
+      [7,  3, 178, 155, 122, 11],
+      [8,  4, 415, 390, 338,  5],
+      [9,  4, 395, 368, 318,  9],
+      // out
+      [10, 4, 422, 395, 342, 10],
+      [11, 3, 185, 162, 130, 16],
+      [12, 5, 548, 520, 468,  4],
+      [13, 4, 410, 385, 332,  6],
+      [14, 4, 388, 362, 312, 18],
+      [15, 5, 542, 515, 465,  2],
+      [16, 3, 198, 172, 142, 12],
+      [17, 4, 432, 405, 355,  8],
+      [18, 4, 489, 458, 402, 14],
+      // in
+    ]
+  }
+};
+
+function buildScorecardTable(course){
+  const d = SCORECARDS[course];
+  const h = d.holes;
+  const front = h.slice(0,9);
+  const back  = h.slice(9,18);
+
+  function outTotals(holes){ return holes.reduce((a,r)=>({par:a.par+r[1],blue:a.blue+r[2],white:a.white+r[3],red:a.red+r[4]}),{par:0,blue:0,white:0,red:0}); }
+  const fo = outTotals(front);
+  const bo = outTotals(back);
+
+  function holeRow(r){
+    return `<tr>
+      <td class="hole-num">${r[0]}</td>
+      <td class="par-cell">${r[1]}</td>
+      <td>${r[2]}</td>
+      <td>${r[3]}</td>
+      <td>${r[4]}</td>
+      <td style="color:var(--text-muted)">${r[5]}</td>
+    </tr>`;
+  }
+
+  return `
+    <tr>
+      <th>Hole</th><th>Par</th><th>Blue</th><th>White</th><th>Red</th><th>Hcp</th>
+    </tr>
+    ${front.map(holeRow).join('')}
+    <tr class="out-row">
+      <td>OUT</td><td class="par-cell">${fo.par}</td><td>${fo.blue}</td><td>${fo.white}</td><td>${fo.red}</td><td>—</td>
+    </tr>
+    ${back.map(holeRow).join('')}
+    <tr class="in-row">
+      <td>IN</td><td class="par-cell">${bo.par}</td><td>${bo.blue}</td><td>${bo.white}</td><td>${bo.red}</td><td>—</td>
+    </tr>
+    <tr class="total-row">
+      <td>TOTAL</td><td class="par-cell">${fo.par+bo.par}</td><td>${fo.blue+bo.blue}</td><td>${fo.white+bo.white}</td><td>${fo.red+bo.red}</td><td>—</td>
+    </tr>`;
+}
+
+function openScorecard(course){
+  const d = SCORECARDS[course];
+  document.getElementById('sc-modal-title').textContent = d.name;
+  document.getElementById('sc-modal-sub').textContent   = d.sub;
+  document.getElementById('sc-table-content').innerHTML = buildScorecardTable(course);
+  document.getElementById('sc-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeScorecard(){
+  document.getElementById('sc-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+// swipe down to close
+(function(){
+  const modal = document.getElementById('sc-modal');
+  let startY = 0;
+  modal.addEventListener('touchstart', e=>{ startY = e.touches[0].clientY; }, {passive:true});
+  modal.addEventListener('touchend',   e=>{
+    if(e.changedTouches[0].clientY - startY > 80) closeScorecard();
+  }, {passive:true});
+})();
 
 // ═══════════════════════════════════
 // INIT
